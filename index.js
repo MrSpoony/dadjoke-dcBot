@@ -6,6 +6,8 @@ require('dotenv').config();
 
 const client = new discord.Client();
 
+const date = new Date();
+
 const commands = [
     [
         'toggle-dad-jokes',
@@ -26,12 +28,16 @@ const commands = [
 
 client.login(process.env.BOTTOKEN);
 client.on('ready', readyDiscord);
+process.env.TZ = 'Europe/Zurich'
 
 let channelIds = [];
 
+const time = new Date();
+
 function readyDiscord() {
-    console.log("Discord bot is ready");
-    let scheduledMessage = new cron.CronJob('*/2 * * * * *', async () => {
+    console.log(date.toLocaleTimeString() + ": Discord bot is ready");
+    // let scheduledMessage = new cron.CronJob('10 36 10 * * *', async () => {
+    let scheduledMessage = new cron.CronJob('00 00 00 * * *', async () => {
         for (let i = 0; i < channelIds.length; i++) {
             let channelId = channelIds[i];
 
@@ -39,10 +45,10 @@ function readyDiscord() {
                 .then(channel => sendDadJoke(channel))
                 .catch(console.error);
         }
-        console.log('Sent dad jokes to ' + channelIds.length + ' channels');
-    });
+        console.log(date.toLocaleTimeString() + ': Sent dad jokes to ' + channelIds.length + ' channels');
+    }, undefined, true, 'Europe/Zurich');
 
-    scheduledMessage.start();
+    // scheduledMessage.start();
 }
 
 function sendDadJoke(channel) {
@@ -74,14 +80,14 @@ client.on('message', async (msg) => {
                 }
             }
             msg.reply("✅ Channel won't recieve dad jokes anymore.");
-            console.log('Removed channel with id: ' + channelId);
+            console.log(date.toLocaleTimeString() + ': Removed channel with id: ' + channelId);
         } else {
             channelIds.push(channelId);
             msg.reply('✅ Channel will recieve a dad joke every day at 00:00:00.');
-            console.log('Added channel with id: ' + channelId);
+            console.log(date.toLocaleTimeString() + ': Added channel with id: ' + channelId);
         }
     } else if (commands[1].includes(message)) {
-        console.log('Sent a joke to user with id: ' + msg.author.id);
+        console.log(date.toLocaleTimeString() + ': Sent a joke to user with id: ' + msg.author.id);
         replyDadJoke(msg);
     }
 });
