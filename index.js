@@ -47,7 +47,7 @@ function readyDiscord() {
         }
         console.log(date.toLocaleTimeString() + ': Sent dad jokes to ' + channelIds.length + ' channels');
     }, undefined, true, 'Europe/Zurich');
-
+    client.user.setActivity('waiting for midnight');
     // scheduledMessage.start();
 }
 
