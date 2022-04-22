@@ -36,7 +36,6 @@ const time = new Date();
 
 function readyDiscord() {
     console.log(date.toLocaleTimeString() + ": Discord bot is ready");
-    // let scheduledMessage = new cron.CronJob('10 36 10 * * *', async () => {
     let scheduledMessage = new cron.CronJob('00 00 00 * * *', async () => {
         for (let i = 0; i < channelIds.length; i++) {
             let channelId = channelIds[i];
