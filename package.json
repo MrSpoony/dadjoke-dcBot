@@ -14,8 +14,7 @@
     "discord.js": "^12.5.3",
     "dotenv": "^16.0.0",
     "https": "^1.0.0",
-    "node-fetch": "^2.6.7",
-    "request": "^2.88.2"
+    "node-fetch": "^2.6.7"
   },
   "devDependencies": {
     "@types/cron": "^2.0.0",
