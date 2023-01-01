@@ -25,7 +25,6 @@ const commands = [
     ]
 ]
 
-
 client.login(process.env.BOTTOKEN);
 client.on('ready', readyDiscord);
 process.env.TZ = 'Europe/Zurich'
@@ -47,21 +46,35 @@ function readyDiscord() {
         console.log(date.toLocaleTimeString() + ': Sent dad jokes to ' + channelIds.length + ' channels');
     }, undefined, true, 'Europe/Zurich');
     client.user.setActivity('waiting for midnight');
-    // scheduledMessage.start();
 }
 
+const options = {
+    method: 'GET',
+    url: 'https://dad-jokes.p.rapidapi.com/random/joke',
+    headers: {
+        'X-RapidAPI-Key': process.env.RAPID_API_KEY,
+        'X-RapidAPI-Host': 'dad-jokes.p.rapidapi.com',
+        useQueryString: true
+    }
+};
+
+
 function sendDadJoke(channel) {
-    request('https://icanhazdadjoke.com/slack', { json: true }, (err, res, body) => {
+    request(options, {json: true}, (err, res, body) => {
         if (err) return console.error(err);
-        channel.send(body.attachments[0].text);
-    });
+        body = JSON.parse(body)
+        const joke = body.body[0]
+        channel.send(`${joke.setup}\n${joke.punchline}`)
+    })
 }
 
 function replyDadJoke(msg) {
-    request('https://icanhazdadjoke.com/slack', { json: true }, (err, res, body) => {
+    request(options, {json: true}, (err, res, body) => {
         if (err) return console.error(err);
-        msg.reply(body.attachments[0].text);
-    });
+        body = JSON.parse(body)
+        const joke = body.body[0]
+        msg.reply(`${joke.setup}\n${joke.punchline}`);
+    })
 }
 
 
