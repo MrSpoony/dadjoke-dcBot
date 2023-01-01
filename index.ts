@@ -48,7 +48,11 @@ const readData = async () => {
 };
 
 const setupDiscord = (client: discord.Client): void => {
-    client.user?.setActivity("waiting for midnight");
+    if (!client.user) {
+        log("No client user detected");
+    } else {
+        client.user.setActivity("waiting for midnight");
+    }
     new cron.CronJob("00 00 00 * * *", async () => {
         for (const channelId of data.channelIds) {
             client.channels.fetch(channelId)
